@@ -3,9 +3,13 @@ package pet.store.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-
+@Entity
 @Data
 public class PetStore {
 	
@@ -17,6 +21,12 @@ public class PetStore {
 	private int pet_store_zip;
 	private int pet_store_phone;
 	
+	@OneToMany(mappedBy = "employees", cascade = cascadeType.ALL)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Set<Employee> employees = new HashSet<>();
+	
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Set<Customer> customers = new HashSet<>();
 }
