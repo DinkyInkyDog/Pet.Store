@@ -1,8 +1,9 @@
 package pet.store.entity;
 
-import org.springframework.data.annotation.Id;
+
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,17 +19,17 @@ public class Employee {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long employee_id;
+	private Long employeeId;
 	
-	private String employee_first_name;
-	private String employee_last_name;
+	private String employeeFirstName;
+	private String employeeLastName;
 	
-	private String employee_phone;
-	private String employee_job_title;
+	private String employeePhone;
+	private String employeejobTitle;
 	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pet_store_id", nullable = false)
-	private PetStore petstore;
+	private PetStore petStore;
 }

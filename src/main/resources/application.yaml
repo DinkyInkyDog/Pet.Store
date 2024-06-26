@@ -8,7 +8,7 @@ spring:
       hiberate:
          ddl-auto: create
       show-sql: true
-      difer-datasource-initialization: true
+      defer-datasource-initialization: true
    
    sql:
       init:

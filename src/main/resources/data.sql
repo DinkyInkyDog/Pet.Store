@@ -1,0 +1,1 @@
+INSERT INTO customer [customer] VALUES ('Luna', 'Moonberry', 'LuneyBerry@gmail.com');
