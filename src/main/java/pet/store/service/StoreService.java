@@ -34,9 +34,14 @@ public class StoreService {
 		employee.setEmployeeJobTitle(ed.getEmployeeJobTitle());
 		employee.setEmployeePhone(ed.getEmployeePhone());
 		Long petId = ed.getPetStoreId();
+		
+		if (petId != null) {
 		PetStore petStore = psDao.findById(petId).orElseThrow(
 				() -> new NoSuchElementException("Pet Store with Id=" + petId + " was not Found"));
 		employee.setPetStore(petStore);
+		} else {
+			System.out.println("No pet stores");
+		}
 	}
 
 	private Employee findOrCreateEmployee(Long employeeId) {
