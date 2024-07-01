@@ -25,7 +25,7 @@ public class Employee {
 	private String employeeLastName;
 	
 	private String employeePhone;
-	private String employeejobTitle;
+	private String employeeJobTitle;
 	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude

@@ -5,7 +5,10 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pet.store.controller.model.EmployeeData.PetStoreResponse;
+import pet.store.entity.Customer;
+import pet.store.entity.Employee;
+import pet.store.entity.PetStore;
+
 
 @Data
 @NoArgsConstructor
@@ -24,6 +27,7 @@ public class PetStoreData {
 	private Set<CustomerResponse> customerResponse = new HashSet<>();
 	
 	@Data
+	@NoArgsConstructor
 	static class EmployeeResponse {
 		private Long employeeId;
 		
@@ -31,7 +35,21 @@ public class PetStoreData {
 		private String employeeLastName;
 		
 		private String employeePhone;
-		private String employeejobTitle;
+		private String employeeJobTitle;
+		
+		private Long petStoreId;
+		
+		public EmployeeResponse(Employee em) {
+			employeeId = em.getEmployeeId();
+			employeeFirstName = em.getEmployeeFirstName();
+			employeeLastName = em.getEmployeeLastName();
+			employeePhone = em.getEmployeePhone();
+			employeeJobTitle = em.getEmployeeJobTitle();
+			
+			PetStore ps = em.getPetStore();
+			
+			petStoreId = ps.getPetStoreId();		}
+		
 	}
 	
 	@Data
@@ -42,6 +60,17 @@ public class PetStoreData {
 		private String customerLastName;
 		private String customerEmail;
 		
-		private Set <PetStoreResponse> petStoresResponse = new HashSet<>();
+		private Set<Long> petStores = new HashSet<>();
+		
+		public CustomerResponse(Customer cs) {
+			customerId = cs.getCustomerId();
+			customerFirstName = cs.getCustomerFirstName();
+			customerLastName = cs.getCustomerLastName();
+			customerEmail = cs.getCustomerEmail();
+			
+			for (PetStore ps : cs.getStoresShoppedAt()) {
+				petStores.add(ps.getPetStoreId());
+			}
+		}
 	}
 }

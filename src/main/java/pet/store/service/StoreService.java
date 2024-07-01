@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pet.store.Dao.EmployeeDao;
+import pet.store.Dao.PetStoreDao;
 import pet.store.controller.model.EmployeeData;
 import pet.store.entity.Employee;
+import pet.store.entity.PetStore;
 
 @Service
 public class StoreService {
 	
 	@Autowired
 	private EmployeeDao emDao;
+	private PetStoreDao psDao;
 	
 	@Transactional(readOnly = false)
 	public EmployeeData insertEmployee(EmployeeData ed) {
@@ -28,9 +31,12 @@ public class StoreService {
 	private void setFeildsInEmployee(Employee employee, EmployeeData ed) {
 		employee.setEmployeeFirstName(ed.getEmployeeFirstName());
 		employee.setEmployeeLastName(ed.getEmployeeLastName());
-		employee.setEmployeejobTitle(ed.getEmployeejobTitle());
+		employee.setEmployeeJobTitle(ed.getEmployeeJobTitle());
 		employee.setEmployeePhone(ed.getEmployeePhone());
-		
+		Long petId = ed.getPetStoreId();
+		PetStore petStore = psDao.findById(petId).orElseThrow(
+				() -> new NoSuchElementException("Pet Store with Id=" + petId + " was not Found"));
+		employee.setPetStore(petStore);
 	}
 
 	private Employee findOrCreateEmployee(Long employeeId) {
