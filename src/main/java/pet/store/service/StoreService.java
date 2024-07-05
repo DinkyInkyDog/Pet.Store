@@ -18,6 +18,8 @@ public class StoreService {
 	
 	@Autowired
 	private EmployeeDao emDao;
+	
+	@Autowired
 	private PetStoreDao psDao;
 	
 	@Transactional(readOnly = false)
