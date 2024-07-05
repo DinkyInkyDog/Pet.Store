@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pet.store.Dao.EmployeeDao;
 import pet.store.Dao.PetStoreDao;
 import pet.store.controller.model.EmployeeData;
+import pet.store.controller.model.PetStoreData;
 import pet.store.entity.Employee;
 import pet.store.entity.PetStore;
 
@@ -89,6 +90,15 @@ public class StoreService {
 		Employee employee = findOrCreateEmployee(employeeId);
 		
 		return ;
+	}
+
+	
+	//PetStore-----------
+	
+	
+	@Transactional(readOnly = false)
+	public PetStoreData savePetStore(PetStoreData storedata) {
+		
 	}
 
 }
