@@ -27,6 +27,9 @@ public class StoreService {
 		Long employeeId = ed.getEmployeeId();
 		Employee employee = findOrCreateEmployee(employeeId);
 		setFeildsInEmployee(employee, ed);
+		//does that actually set things? Check once I have a connection?
+		
+		
 		return new EmployeeData (emDao.save(employee));
 	}
 
@@ -35,15 +38,29 @@ public class StoreService {
 		employee.setEmployeeLastName(ed.getEmployeeLastName());
 		employee.setEmployeeJobTitle(ed.getEmployeeJobTitle());
 		employee.setEmployeePhone(ed.getEmployeePhone());
-		Long petId = ed.getPetStoreId();
 		
-		if (petId != null) {
-		PetStore petStore = psDao.findById(petId).orElseThrow(
-				() -> new NoSuchElementException("Pet Store with Id=" + petId + " was not Found"));
-		employee.setPetStore(petStore);
-		} else {
-			System.out.println("No pet stores");
+		if (ed.getPetStoreEmployment().getPetStoreId() != null) {
+			Long petStoreId = ed.getPetStoreEmployment().getPetStoreId();
+			PetStore petStore = findOrCreatePetStore(petStoreId);
+			employee.setPetStore(petStore);
 		}
+		
+	}
+
+	private PetStore findOrCreatePetStore(Long petStoreId) {
+		PetStore ps;
+		if (Objects.isNull(petStoreId)) {
+			ps = new PetStore();
+		} else {
+			ps = findPetStoreById(petStoreId);
+		}
+		return ps;
+	}
+
+	private PetStore findPetStoreById(Long petStoreId) {
+		return psDao.findById(petStoreId).orElseThrow(
+				() -> new NoSuchElementException(
+						"Pet store with ID=" + petStoreId + " was not found"));
 	}
 
 	private Employee findOrCreateEmployee(Long employeeId) {
@@ -57,7 +74,8 @@ public class StoreService {
 	}
 
 	private Employee findEmployeeById(Long employeeId) {
-		return emDao.findById(employeeId).orElseThrow(() -> new NoSuchElementException(
+		return emDao.findById(employeeId).orElseThrow(
+				() -> new NoSuchElementException(
 				"Employee with ID =" + employeeId + " was not found"));
 	}
 
