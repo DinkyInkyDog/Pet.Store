@@ -22,6 +22,10 @@ public class StoreService {
 	@Autowired
 	private PetStoreDao psDao;
 	
+	
+	
+	
+	
 	@Transactional(readOnly = false)
 	public EmployeeData saveEmployee(EmployeeData ed) {
 		Long employeeId = ed.getEmployeeId();
@@ -79,10 +83,12 @@ public class StoreService {
 	}
 	
 	
-
+	
+	@Transactional(readOnly = true)
 	public EmployeeData updateEmployee(Long employeeId) {
-		
-		return null;
+		Employee employee = findOrCreateEmployee(employeeId);
+		EmployeeData foundEmployee = new EmployeeData(employee);
+		return foundEmployee;
 	}
 
 }
