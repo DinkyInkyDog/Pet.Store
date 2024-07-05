@@ -84,11 +84,11 @@ public class StoreService {
 	
 	
 	
-	@Transactional(readOnly = true)
-	public EmployeeData updateEmployee(Long employeeId) {
+	@Transactional(readOnly = false)
+	public EmployeeData updateEmployee(Long employeeId, EmployeeData employeeData) {
 		Employee employee = findOrCreateEmployee(employeeId);
-		EmployeeData foundEmployee = new EmployeeData(employee);
-		return foundEmployee;
+		
+		return ;
 	}
 
 }
