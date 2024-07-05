@@ -26,6 +26,28 @@ public class PetStoreData {
 	
 	private Set<CustomerResponse> customerResponse = new HashSet<>();
 	
+	
+	public PetStoreData(PetStore ps) {
+		petStoreId = ps.getPetStoreId();
+		petStoreName = ps.getPetStoreName();
+		petStoreAddress= ps.getPetStoreAddress();
+		petStoreCity = ps.getPetStoreCity();
+		petStoreState = ps.getPetStoreState();
+		petStoreZip = ps.getPetStoreZip();
+		petStorePhone = ps.getPetStorePhone();
+		
+		for(Employee employee: ps.getEmployees()) {
+			employeeResponse.add(new EmployeeResponse(employee));
+		}
+		
+		for(Customer customer : ps.getCustomers()) {
+			customerResponse.add(new CustomerResponse(customer));
+		}
+	}
+	
+	
+	
+	
 	@Data
 	@NoArgsConstructor
 	static class EmployeeResponse {
@@ -37,7 +59,6 @@ public class PetStoreData {
 		private String employeePhone;
 		private String employeeJobTitle;
 		
-		private Long petStoreId;
 		
 		public EmployeeResponse(Employee em) {
 			employeeId = em.getEmployeeId();
@@ -46,9 +67,7 @@ public class PetStoreData {
 			employeePhone = em.getEmployeePhone();
 			employeeJobTitle = em.getEmployeeJobTitle();
 			
-			PetStore ps = em.getPetStore();
-			
-			petStoreId = ps.getPetStoreId();		}
+				}
 		
 	}
 	
@@ -60,7 +79,7 @@ public class PetStoreData {
 		private String customerLastName;
 		private String customerEmail;
 		
-		private Set<Long> petStores = new HashSet<>();
+		
 		
 		public CustomerResponse(Customer cs) {
 			customerId = cs.getCustomerId();
@@ -68,9 +87,7 @@ public class PetStoreData {
 			customerLastName = cs.getCustomerLastName();
 			customerEmail = cs.getCustomerEmail();
 			
-			for (PetStore ps : cs.getStoresShoppedAt()) {
-				petStores.add(ps.getPetStoreId());
-			}
+			
 		}
 	}
 }

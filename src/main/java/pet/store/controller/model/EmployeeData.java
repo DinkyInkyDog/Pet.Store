@@ -22,7 +22,7 @@ public class EmployeeData {
 	private String employeePhone;
 	private String employeeJobTitle;
 	
-	private Long petStoreId;
+	private PetStoreResponse petStoreEmployment;
 	
 	public EmployeeData(Employee em) {
 		employeeId = em.getEmployeeId();
@@ -31,8 +31,7 @@ public class EmployeeData {
 		employeePhone = em.getEmployeePhone();
 		employeeJobTitle = em.getEmployeeJobTitle();
 
-
-		petStoreId = em.getPetStore().getPetStoreId();
+		petStoreEmployment = new PetStoreResponse(em.getPetStore());
 	}
 	
 	
