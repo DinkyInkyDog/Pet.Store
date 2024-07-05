@@ -23,12 +23,11 @@ public class StoreService {
 	private PetStoreDao psDao;
 	
 	@Transactional(readOnly = false)
-	public EmployeeData insertEmployee(EmployeeData ed) {
+	public EmployeeData saveEmployee(EmployeeData ed) {
 		Long employeeId = ed.getEmployeeId();
 		Employee employee = findOrCreateEmployee(employeeId);
 		setFeildsInEmployee(employee, ed);
-		//does that actually set things? Check once I have a connection?
-		
+		//does that actually save it? check?
 		
 		return new EmployeeData (emDao.save(employee));
 	}
@@ -77,6 +76,13 @@ public class StoreService {
 		return emDao.findById(employeeId).orElseThrow(
 				() -> new NoSuchElementException(
 				"Employee with ID =" + employeeId + " was not found"));
+	}
+	
+	
+
+	public EmployeeData updateEmployee(Long employeeId) {
+		
+		return null;
 	}
 
 }

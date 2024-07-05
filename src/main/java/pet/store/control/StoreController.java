@@ -2,6 +2,7 @@ package pet.store.control;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +25,17 @@ public class StoreController {
 	
 	@PostMapping("/store/{storeId}/employee")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public EmployeeData insertEmployee(
+	public EmployeeData saveEmployee(
 			@PathVariable Long storeId,
 			@RequestBody EmployeeData employeeData) {
 		log.info("Creating employee {} for pet store with Id={}", employeeData, storeId);
-		return ss.insertEmployee(employeeData);
+		return ss.saveEmployee(employeeData);
+	}
+	
+	@GetMapping("/store/employee/{employeeId}")
+	public EmployeeData selectEmployeeFromId(
+			@PathVariable Long employeeId) {
+		log.info("View Employee with Id= {}", employeeId);
+		return ss.updateEmployee(employeeId);
 	}
 }
