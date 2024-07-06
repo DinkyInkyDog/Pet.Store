@@ -61,12 +61,6 @@ public class StoreService {
 		return ps;
 	}
 
-	private PetStore findPetStoreById(Long petStoreId) {
-		return psDao.findById(petStoreId).orElseThrow(
-				() -> new NoSuchElementException(
-						"Pet store with ID=" + petStoreId + " was not found"));
-	}
-
 	private Employee findOrCreateEmployee(Long employeeId) {
 		Employee em;
 		if (Objects.isNull(employeeId)) {
@@ -89,7 +83,7 @@ public class StoreService {
 	public EmployeeData updateEmployee(Long employeeId, EmployeeData employeeData) {
 		Employee employee = findOrCreateEmployee(employeeId);
 		
-		return ;
+		return null;
 	}
 
 	
@@ -98,7 +92,36 @@ public class StoreService {
 	
 	@Transactional(readOnly = false)
 	public PetStoreData savePetStore(PetStoreData storedata) {
+		Long storeId = storedata.getPetStoreId();
+		PetStore store = findOrCreateStore(storeId);
+		setFeildsInStore(storedata);
+		//does that actually save it? check?
+		
+		return new PetStoreData (psDao.save(store));
+	}
+
+	private void setFeildsInStore(PetStoreData storedata) {
+		
 		
 	}
+
+	private PetStore findOrCreateStore(Long storeId) {
+		PetStore ps;
+		if (Objects.isNull(storeId)) {
+			ps = new PetStore();
+		} else {
+			ps = findPetStoreById(storeId);
+		}
+		return ps;
+	}
+
+
+	private PetStore findPetStoreById(Long petStoreId) {
+		return psDao.findById(petStoreId).orElseThrow(
+				() -> new NoSuchElementException(
+						"Pet store with ID=" + petStoreId + " was not found"));
+	}
+	
+	
 
 }
