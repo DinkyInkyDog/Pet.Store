@@ -93,14 +93,18 @@ public class StoreService {
 	public PetStoreData savePetStore(PetStoreData storedata) {
 		Long storeId = storedata.getPetStoreId();
 		PetStore store = findOrCreatePetStore(storeId);
-		setFeildsInStore(storedata);
-		//does that actually save it? check?
+		setFeildsInStore(storedata, store);
 		
 		return new PetStoreData (psDao.save(store));
 	}
 
-	private void setFeildsInStore(PetStoreData storedata) {
-		
+	private void setFeildsInStore(PetStoreData storedata, PetStore store) {
+		store.setPetStoreName(storedata.getPetStoreName());
+		store.setPetStoreAddress(storedata.getPetStoreAddress());
+		store.setPetStoreCity(storedata.getPetStoreCity());
+		store.setPetStoreState(storedata.getPetStoreState());
+		store.setPetStoreZip(storedata.getPetStoreZip());
+		store.setPetStorePhone(storedata.getPetStorePhone());
 		
 	}
 
