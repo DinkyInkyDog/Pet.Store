@@ -2,7 +2,7 @@ package pet.store.control;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +25,8 @@ import pet.store.service.StoreService;
 public class StoreController {
 	@Autowired
 	private StoreService ss = new StoreService();
+	
+	
 	
 	//Employee---------------------------
 	
@@ -59,6 +61,12 @@ public class StoreController {
 		return ss.saveEmployee(employeeData);
 	}
 	
+	@DeleteMapping("/store/employee")
+	void deleteAllEmployees() {
+		log.info("Attempting to delete all employees");
+		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
+	}
+	
 	
 	
 	//PetStore---------------------
@@ -83,6 +91,13 @@ public class StoreController {
 	}
 	
 	
+	@DeleteMapping("/store")
+	void deleteAllPetStores() {
+		log.info("Attempting to delete all pet stores");
+		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
+	}
+	
+	
 	//Customer------------------------
 	
 	@PostMapping("/customer")
@@ -104,6 +119,10 @@ public class StoreController {
 	}
 	
 	
-	
+	@DeleteMapping("/customer")
+	void deleteAllCustomers() {
+		log.info("Attempting to delete all customers");
+		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
+	}
 	
 }
