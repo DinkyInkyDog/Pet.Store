@@ -35,13 +35,11 @@ public class StoreService {
 	
 	
 	@Transactional(readOnly = false)
-	public EmployeeData saveEmployee(Long storeId, EmployeeData ed) {
+	public EmployeeData saveEmployee(EmployeeData ed) {
 		Long employeeId = ed.getEmployeeId();
-		PetStore store = findPetStoreById(storeId);
-		
 		Employee employee = findOrCreateEmployee(employeeId);
 		setFeildsInEmployee(employee, ed);
-		employee.setPetStore(store);
+		
 		
 		
 		return new EmployeeData (emDao.save(employee));
@@ -55,16 +53,6 @@ public class StoreService {
 		
 		
 		
-	}
-
-	private PetStore findOrCreatePetStore(Long petStoreId) {
-		PetStore ps;
-		if (Objects.isNull(petStoreId)) {
-			ps = new PetStore();
-		} else {
-			ps = findPetStoreById(petStoreId);
-		}
-		return ps;
 	}
 
 	private Employee findOrCreateEmployee(Long employeeId) {
@@ -86,8 +74,8 @@ public class StoreService {
 	
 	
 	@Transactional(readOnly = false)
-	public EmployeeData updateEmployee(Long employeeId, EmployeeData employeeData) {
-		Employee employee = findOrCreateEmployee(employeeId);
+	public EmployeeData updateEmployee(EmployeeData employeeData) {
+		
 		
 		return null;
 	}
@@ -115,29 +103,57 @@ public class StoreService {
 		
 		if (!storedata.getCustomerResponse().isEmpty()) {
 			for(CustomerResponse cr: storedata.getCustomerResponse()) {
-				Customer customer = new Customer();
-				customer.setCustomerFirstName(cr.getCustomerFirstName());
-				customer.setCustomerEmail(cr.getCustomerEmail());
-				customer.setCustomerLastName(cr.getCustomerLastName());
-				customer.getStoresShoppedAt().add(store);
-				store.getCustomers().add(customer);
+				if(cr.getCustomerId() != null) {
+					Long customerId = cr.getCustomerId();
+					Customer customer = cuDao.findById(customerId).orElseThrow(
+							() -> new NoSuchElementException("Customer with ID=" +
+					customerId + "was not found"));
+					customer.getStoresShoppedAt().add(store);
+					store.getCustomers().add(customer);
+					
+				} else {
+					Customer customer = new Customer();
+					customer.setCustomerFirstName(cr.getCustomerFirstName());
+					customer.setCustomerEmail(cr.getCustomerEmail());
+					customer.setCustomerLastName(cr.getCustomerLastName());
+					customer.getStoresShoppedAt().add(store);
+					store.getCustomers().add(customer);
+				}
 			}
 		}
 		if(!storedata.getEmployeeResponse().isEmpty()) {
 			for(EmployeeResponse er: storedata.getEmployeeResponse()) {
-				Employee employee = new Employee();
-				employee.setEmployeeFirstName(er.getEmployeeFirstName());
-				employee.setEmployeeLastName(er.getEmployeeLastName());
-				employee.setEmployeeJobTitle(er.getEmployeeJobTitle());
-				employee.setEmployeePhone(er.getEmployeePhone());
-				employee.setPetStore(store);
-				store.getEmployees().add(employee);
+				if(er.getEmployeeId() != null) {
+					Long employeeId = er.getEmployeeId();
+					Employee employee = emDao.findById(employeeId).orElseThrow(
+							() -> new NoSuchElementException("employee with ID=" + 
+					employeeId + " was not found"));
+					employee.setPetStore(store);
+					store.getEmployees().add(employee);
+					
+				} else {
+					Employee employee = new Employee();
+					employee.setEmployeeFirstName(er.getEmployeeFirstName());
+					employee.setEmployeeLastName(er.getEmployeeLastName());
+					employee.setEmployeeJobTitle(er.getEmployeeJobTitle());
+					employee.setEmployeePhone(er.getEmployeePhone());
+					employee.setPetStore(store);
+					store.getEmployees().add(employee);
+				}
 			}
 		}
 	}
 
 
-
+	private PetStore findOrCreatePetStore(Long petStoreId) {
+		PetStore ps;
+		if (Objects.isNull(petStoreId)) {
+			ps = new PetStore();
+		} else {
+			ps = findPetStoreById(petStoreId);
+		}
+		return ps;
+	}
 
 	private PetStore findPetStoreById(Long petStoreId) {
 		return psDao.findById(petStoreId).orElseThrow(

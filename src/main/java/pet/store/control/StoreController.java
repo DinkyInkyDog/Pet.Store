@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import pet.store.controller.model.CustomerData;
 import pet.store.controller.model.EmployeeData;
 import pet.store.controller.model.PetStoreData;
+import pet.store.controller.model.PetStoreResponse;
 import pet.store.service.StoreService;
 
 
@@ -24,27 +25,44 @@ public class StoreController {
 	@Autowired
 	private StoreService ss = new StoreService();
 	
+	//Employee---------------------------
+	
 	
 	@PostMapping("/store/{storeId}/employee")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public EmployeeData saveEmployee(
 			@PathVariable Long storeId,
 			@RequestBody EmployeeData employeeData) {
+		PetStoreResponse psr = new PetStoreResponse();
+		psr.setPetStoreId(storeId);
+		employeeData.setPetStoreEmployment(psr);
 		log.info("Creating employee {} for pet store with Id={}", employeeData, storeId);
-		return ss.saveEmployee(storeId, employeeData);
+		return ss.saveEmployee(employeeData);
 	}
 	
+	/**
+	 * 
+	 * @param employeeId- The id of the existing employee row
+	 * @param employeeData- the request body you wrote with your put request
+	 * make sure you include all the information. Whatever you put it to is what it'll be
+	 * that includes nulls. If you only change the ones you want and leave the others blank
+	 * it'll change them to null.
+	 * @return
+	 */
 	@PutMapping("/store/employee/{employeeId}")
 	public EmployeeData selectEmployeeFromId(
 			@PathVariable Long employeeId,
 			@RequestBody EmployeeData employeeData) {
-		log.info("View Employee with Id= {}", employeeId);
-		return ss.updateEmployee(employeeId, employeeData);
+		employeeData.setEmployeeId(employeeId);
+		log.info("Update Employee ", employeeData);
+		return ss.saveEmployee(employeeData);
 	}
 	
 	
 	
 	//PetStore---------------------
+	
+	
 	@PostMapping("/store")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public PetStoreData savePetStore(
