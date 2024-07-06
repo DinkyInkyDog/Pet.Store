@@ -20,6 +20,7 @@ public class PetStoreResponse {
 		
 	public PetStoreResponse(PetStore ps) {
 			petStoreId = ps.getPetStoreId();
+			petStoreName = ps.getPetStoreName();
 			petStoreAddress = ps.getPetStoreAddress();
 			petStoreCity = ps.getPetStoreCity();
 			petStoreState = ps.getPetStoreState();

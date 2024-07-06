@@ -30,7 +30,7 @@ public class StoreController {
 			@PathVariable Long storeId,
 			@RequestBody EmployeeData employeeData) {
 		log.info("Creating employee {} for pet store with Id={}", employeeData, storeId);
-		return ss.saveEmployee(employeeData);
+		return ss.saveEmployee(storeId, employeeData);
 	}
 	
 	@PutMapping("/store/employee/{employeeId}")

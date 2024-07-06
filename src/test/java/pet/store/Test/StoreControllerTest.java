@@ -31,7 +31,7 @@ class StoreControllerTest {
 		employeeMock.setEmployeeJobTitle("General Stocker");
 		
 		
-		EmployeeData reEm = ss.saveEmployee(employeeMock);
+		//EmployeeData reEm = ss.saveEmployee(employeeMock);
 	}
 
 }

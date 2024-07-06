@@ -28,11 +28,14 @@ public class StoreService {
 	
 	
 	@Transactional(readOnly = false)
-	public EmployeeData saveEmployee(EmployeeData ed) {
+	public EmployeeData saveEmployee(Long storeId, EmployeeData ed) {
 		Long employeeId = ed.getEmployeeId();
+		PetStore store = findPetStoreById(storeId);
+		
 		Employee employee = findOrCreateEmployee(employeeId);
 		setFeildsInEmployee(employee, ed);
-		//does that actually save it? check?
+		employee.setPetStore(store);
+		
 		
 		return new EmployeeData (emDao.save(employee));
 	}
@@ -43,11 +46,7 @@ public class StoreService {
 		employee.setEmployeeJobTitle(ed.getEmployeeJobTitle());
 		employee.setEmployeePhone(ed.getEmployeePhone());
 		
-		if (ed.getPetStoreEmployment().getPetStoreId() != null) {
-			Long petStoreId = ed.getPetStoreEmployment().getPetStoreId();
-			PetStore petStore = findOrCreatePetStore(petStoreId);
-			employee.setPetStore(petStore);
-		}
+		
 		
 	}
 
@@ -93,7 +92,7 @@ public class StoreService {
 	@Transactional(readOnly = false)
 	public PetStoreData savePetStore(PetStoreData storedata) {
 		Long storeId = storedata.getPetStoreId();
-		PetStore store = findOrCreateStore(storeId);
+		PetStore store = findOrCreatePetStore(storeId);
 		setFeildsInStore(storedata);
 		//does that actually save it? check?
 		
@@ -105,15 +104,7 @@ public class StoreService {
 		
 	}
 
-	private PetStore findOrCreateStore(Long storeId) {
-		PetStore ps;
-		if (Objects.isNull(storeId)) {
-			ps = new PetStore();
-		} else {
-			ps = findPetStoreById(storeId);
-		}
-		return ps;
-	}
+
 
 
 	private PetStore findPetStoreById(Long petStoreId) {

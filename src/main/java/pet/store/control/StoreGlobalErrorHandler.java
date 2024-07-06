@@ -41,6 +41,7 @@ public class StoreGlobalErrorHandler {
 				ex, HttpStatus.NOT_FOUND, webRequest, LogStatus.MESSAGE_ONLY);
 	}
 
+	
 
 	private ExceptionMessage buildExceptionMessage(NoSuchObjectException ex, HttpStatus status, WebRequest webRequest,
 			LogStatus logStatus) {
