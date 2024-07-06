@@ -2,6 +2,7 @@ package pet.store.control;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,7 +55,7 @@ public class StoreController {
 			@PathVariable Long employeeId,
 			@RequestBody EmployeeData employeeData) {
 		employeeData.setEmployeeId(employeeId);
-		log.info("Update Employee ", employeeData);
+		log.info("Update Employee {}", employeeData);
 		return ss.saveEmployee(employeeData);
 	}
 	
@@ -65,13 +66,21 @@ public class StoreController {
 	
 	@PostMapping("/store")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public PetStoreData savePetStore(
+	public PetStoreData insertPetStore(
 			@RequestBody PetStoreData storeData) {
 		log.info("Creating Pet store {}", storeData);
 		return ss.savePetStore(storeData);
 	}
 	
 	
+	@PutMapping("/store/{storeId}")
+	public PetStoreData updatePetStore(
+			@RequestBody PetStoreData storeData,
+			@PathVariable Long storeId) {
+		storeData.setPetStoreId(storeId);
+		log.info("Updating Pet store {}", storeData);
+		return ss.savePetStore(storeData);
+	}
 	
 	
 	//Customer------------------------
@@ -83,5 +92,18 @@ public class StoreController {
 		log.info("Creating Customer {}", customerData);
 		return ss.saveCustomer(customerData);
 	}
+	
+	
+	@PutMapping("/customer/{customerId}")
+	public CustomerData updateCustomer(
+			@PathVariable Long customerId,
+			@RequestBody CustomerData customerData) {
+		customerData.setCustomerId(customerId);
+		log.info("Updating customer {}", customerData);
+		return ss.saveCustomer(customerData);
+	}
+	
+	
+	
 	
 }
