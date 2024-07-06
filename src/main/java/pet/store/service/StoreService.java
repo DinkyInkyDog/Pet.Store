@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pet.store.Dao.CustomerDao;
 import pet.store.Dao.EmployeeDao;
 import pet.store.Dao.PetStoreDao;
+import pet.store.control.StoreController.entity;
 import pet.store.controller.model.CustomerData;
 import pet.store.controller.model.CustomerResponse;
 import pet.store.controller.model.EmployeeData;
@@ -225,6 +226,22 @@ public class StoreService {
 	private Customer findCustomerById(Long customerId) {
 		return cuDao.findById(customerId).orElseThrow(() -> new NoSuchElementException(
 				"Customer with ID =" + customerId + " was not Found"));
+	}
+
+
+	public void deleteById(Long id, entity entity) {
+		switch (entity) {
+		case EMPLOYEE: 
+			emDao.deleteById(id);
+			break;
+		case PET_STORE:
+			psDao.deleteById(id);
+			break;
+		case CUSTOMER:
+			cuDao.deleteById(id);
+			break;
+		}
+		
 	}
 	
 	

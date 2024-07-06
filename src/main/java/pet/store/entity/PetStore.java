@@ -34,7 +34,7 @@ public class PetStore {
 	private String petStoreZip;
 	private String petStorePhone;
 	
-	@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "petStore", cascade = CascadeType.PERSIST)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Set<Employee> employees = new HashSet<>();

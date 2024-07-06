@@ -1,5 +1,7 @@
 package pet.store.control;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +28,9 @@ public class StoreController {
 	@Autowired
 	private StoreService ss = new StoreService();
 	
-	
+	public enum entity {
+			EMPLOYEE, PET_STORE, CUSTOMER
+	};
 	
 	//Employee---------------------------
 	
@@ -67,6 +71,14 @@ public class StoreController {
 		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
 	}
 	
+	@DeleteMapping("/store/employee/{employeeId}")
+	public Map<String, String> deleteEmployeeById(
+			@PathVariable Long employeeId){
+		log.info("Deleting Employee with ID={}", employeeId);
+		ss.deleteById(employeeId, entity.EMPLOYEE);
+		
+		return Map.of("Message", "Deletion of Employee with ID = " + employeeId + " was successful");
+	}
 	
 	
 	//PetStore---------------------
@@ -97,6 +109,15 @@ public class StoreController {
 		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
 	}
 	
+	@DeleteMapping("/store/{storeId}")
+	public Map<String, String> deletePetStoreById(
+			@PathVariable Long storeId){
+		log.info("Deleting Pet Store with ID={}", storeId);
+		ss.deleteById(storeId, entity.PET_STORE);
+		
+		return Map.of("Message", "Deletion of Employee with ID = " + storeId + " was successful");
+	}
+	
 	
 	//Customer------------------------
 	
@@ -123,6 +144,15 @@ public class StoreController {
 	void deleteAllCustomers() {
 		log.info("Attempting to delete all customers");
 		throw new UnsupportedOperationException("Sorry, can't have you doing that.");
+	}
+	
+	@DeleteMapping("/customer/{customerId}")
+	public Map<String, String> deleteCustomerById(
+			@PathVariable Long customerId){
+		log.info("Deleting Customer with ID={}", customerId);
+		ss.deleteById(customerId, entity.CUSTOMER);
+		
+		return Map.of("Message", "Deletion of Employee with ID = " + customerId + " was successful");
 	}
 	
 }
