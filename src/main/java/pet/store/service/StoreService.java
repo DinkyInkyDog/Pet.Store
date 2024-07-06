@@ -232,13 +232,25 @@ public class StoreService {
 	public void deleteById(Long id, entity entity) {
 		switch (entity) {
 		case EMPLOYEE: 
+			if (emDao.existsById(id)) {
 			emDao.deleteById(id);
+			} else {
+				throw new NoSuchElementException("There is no Employee with ID=" +id);
+			}
 			break;
 		case PET_STORE:
-			psDao.deleteById(id);
+			if (psDao.existsById(id)) {
+				psDao.deleteById(id);
+				} else {
+					throw new NoSuchElementException("There is no Pet Store with ID=" +id);
+				}
 			break;
 		case CUSTOMER:
-			cuDao.deleteById(id);
+			if (cuDao.existsById(id)) {
+				cuDao.deleteById(id);
+				} else {
+					throw new NoSuchElementException("There is no Customer with ID=" +id);
+				}
 			break;
 		}
 		
