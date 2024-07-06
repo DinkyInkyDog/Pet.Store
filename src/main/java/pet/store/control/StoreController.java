@@ -51,7 +51,7 @@ public class StoreController {
 	 * @return
 	 */
 	@PutMapping("/store/employee/{employeeId}")
-	public EmployeeData selectEmployeeFromId(
+	public EmployeeData updateEmployeeFromId(
 			@PathVariable Long employeeId,
 			@RequestBody EmployeeData employeeData) {
 		employeeData.setEmployeeId(employeeId);

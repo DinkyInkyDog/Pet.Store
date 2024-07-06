@@ -1,9 +1,11 @@
 package pet.store.controller.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pet.store.entity.Customer;
 
 @Data
+@NoArgsConstructor
 public class CustomerResponse {
 	private Long customerId;
 	

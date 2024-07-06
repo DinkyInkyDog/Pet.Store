@@ -3,6 +3,7 @@ package pet.store.control;
 import java.rmi.NoSuchObjectException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,17 +34,17 @@ public class StoreGlobalErrorHandler {
 	}
 	
 	
-	@ExceptionHandler(NoSuchObjectException.class)
+	@ExceptionHandler(NoSuchElementException.class)
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	public ExceptionMessage handlerNoSuchObjectException(
-			NoSuchObjectException ex, WebRequest webRequest) {
+			NoSuchElementException ex, WebRequest webRequest) {
 		return buildExceptionMessage(
 				ex, HttpStatus.NOT_FOUND, webRequest, LogStatus.MESSAGE_ONLY);
 	}
 
 	
 
-	private ExceptionMessage buildExceptionMessage(NoSuchObjectException ex, HttpStatus status, WebRequest webRequest,
+	private ExceptionMessage buildExceptionMessage(NoSuchElementException ex, HttpStatus status, WebRequest webRequest,
 			LogStatus logStatus) {
 		String message = ex.toString();
 		String statusReason = status.getReasonPhrase();

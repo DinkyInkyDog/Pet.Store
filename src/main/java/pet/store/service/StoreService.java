@@ -37,7 +37,15 @@ public class StoreService {
 	@Transactional(readOnly = false)
 	public EmployeeData saveEmployee(EmployeeData ed) {
 		Long employeeId = ed.getEmployeeId();
+		PetStore petstore = null;
+
 		Employee employee = findOrCreateEmployee(employeeId);
+		if (ed.getPetStoreEmployment() != null) {
+			Long petStoreId = ed.getPetStoreEmployment().getPetStoreId();
+			petstore = findPetStoreById(petStoreId);
+			employee.setPetStore(petstore);
+		}
+		
 		setFeildsInEmployee(employee, ed);
 		
 		
