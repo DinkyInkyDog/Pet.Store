@@ -1,5 +1,6 @@
 package pet.store.control;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
@@ -112,5 +113,42 @@ public class StoreGlobalErrorHandler {
 	}
 
 
+	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	@ResponseStatus(code = HttpStatus.CONFLICT)
+	public ExceptionMessage handlerDuplicateEntry(SQLIntegrityConstraintViolationException ex, 
+			WebRequest webRequest) {
+		return buildExceptionMessage(ex, HttpStatus.CONFLICT, webRequest, LogStatus.MESSAGE_ONLY);
+	}
 
+
+
+	private ExceptionMessage buildExceptionMessage(SQLIntegrityConstraintViolationException ex, HttpStatus status,
+			WebRequest webRequest, LogStatus logStatus) {
+		String message = ex.toString();
+		String statusReason = status.getReasonPhrase();
+		int statusCode = status.value();
+		String timeStamp = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+		String uri = null;
+		
+		if (webRequest instanceof ServletWebRequest swr) {
+			uri = swr.getRequest().getRequestURI();
+		}
+		
+		if (logStatus == LogStatus.MESSAGE_ONLY) {
+			log.error("Exception: {}", ex.toString());
+		} else {
+			log.error("Exception: ", ex);
+		}
+		
+		ExceptionMessage exMessage = new ExceptionMessage();
+
+		exMessage.setMessage(message);
+		exMessage.setStatusCode(statusCode);
+		exMessage.setStatusReason(statusReason);
+		exMessage.setUri(uri);
+		exMessage.setTimeStamp(timeStamp);
+		
+		return exMessage;
+	}
+	
 }

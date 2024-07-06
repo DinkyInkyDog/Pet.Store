@@ -6,6 +6,7 @@ import java.util.Set;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class PetStore {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long petStoreId;
 	
+	@Column(unique = true)
 	private String petStoreName;
 	private String petStoreAddress;
 	private String petStoreCity;
