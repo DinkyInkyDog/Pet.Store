@@ -1,6 +1,5 @@
 package pet.store.control;
 
-import java.rmi.NoSuchObjectException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
@@ -13,7 +12,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
