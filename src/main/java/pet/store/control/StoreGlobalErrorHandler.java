@@ -59,8 +59,14 @@ public class StoreGlobalErrorHandler {
 		} else {
 			log.error("Exception: ", ex);
 		}
+		
 		ExceptionMessage exMessage = new ExceptionMessage();
-		exMessage
+
+		exMessage.setMessage(message);
+		exMessage.setStatusCode(statusCode);
+		exMessage.setStatusReason(statusReason);
+		exMessage.setUri(uri);
+		exMessage.setTimeStamp(timeStamp);
 		
 		return exMessage;
 	}
