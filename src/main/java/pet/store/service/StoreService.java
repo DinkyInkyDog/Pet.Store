@@ -7,10 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pet.store.Dao.CustomerDao;
 import pet.store.Dao.EmployeeDao;
 import pet.store.Dao.PetStoreDao;
+import pet.store.controller.model.CustomerData;
+import pet.store.controller.model.CustomerResponse;
 import pet.store.controller.model.EmployeeData;
+import pet.store.controller.model.EmployeeResponse;
 import pet.store.controller.model.PetStoreData;
+import pet.store.controller.model.PetStoreResponse;
+import pet.store.entity.Customer;
 import pet.store.entity.Employee;
 import pet.store.entity.PetStore;
 
@@ -23,7 +29,8 @@ public class StoreService {
 	@Autowired
 	private PetStoreDao psDao;
 	
-	
+	@Autowired
+	private CustomerDao cuDao;
 	
 	
 	
@@ -86,7 +93,7 @@ public class StoreService {
 	}
 
 	
-	//PetStore-----------
+	//PetStore-----------------------------------------
 	
 	
 	@Transactional(readOnly = false)
@@ -106,6 +113,27 @@ public class StoreService {
 		store.setPetStoreZip(storedata.getPetStoreZip());
 		store.setPetStorePhone(storedata.getPetStorePhone());
 		
+		if (!storedata.getCustomerResponse().isEmpty()) {
+			for(CustomerResponse cr: storedata.getCustomerResponse()) {
+				Customer customer = new Customer();
+				customer.setCustomerFirstName(cr.getCustomerFirstName());
+				customer.setCustomerEmail(cr.getCustomerEmail());
+				customer.setCustomerLastName(cr.getCustomerLastName());
+				customer.getStoresShoppedAt().add(store);
+				store.getCustomers().add(customer);
+			}
+		}
+		if(!storedata.getEmployeeResponse().isEmpty()) {
+			for(EmployeeResponse er: storedata.getEmployeeResponse()) {
+				Employee employee = new Employee();
+				employee.setEmployeeFirstName(er.getEmployeeFirstName());
+				employee.setEmployeeLastName(er.getEmployeeLastName());
+				employee.setEmployeeJobTitle(er.getEmployeeJobTitle());
+				employee.setEmployeePhone(er.getEmployeePhone());
+				employee.setPetStore(store);
+				store.getEmployees().add(employee);
+			}
+		}
 	}
 
 
@@ -115,6 +143,64 @@ public class StoreService {
 		return psDao.findById(petStoreId).orElseThrow(
 				() -> new NoSuchElementException(
 						"Pet store with ID=" + petStoreId + " was not found"));
+	}
+
+	
+	
+	//Customer------------------------------
+	
+	@Transactional(readOnly = false)
+	public CustomerData saveCustomer(CustomerData customerData) {
+		Long customerId = customerData.getCustomerId();
+		Customer customer = findOrCreateCustomer(customerId);
+		setFeildsInCustomer(customer, customerData);
+		
+		return new CustomerData(cuDao.save(customer));
+	}
+
+	private void setFeildsInCustomer(Customer customer, CustomerData cd) {
+		customer.setCustomerEmail(cd.getCustomerEmail());
+		customer.setCustomerFirstName(cd.getCustomerFirstName());
+		customer.setCustomerLastName(cd.getCustomerLastName());
+		
+		if (!cd.getStoresShoppedAtResponse().isEmpty()) {
+			for (PetStoreResponse store : cd.getStoresShoppedAtResponse()) {
+				if(store.getPetStoreId() != null) {
+					Long storeId = store.getPetStoreId();
+					PetStore petStore = psDao.findById(storeId).orElseThrow(
+							() -> new NoSuchElementException("Pet store with ID = "+
+							storeId + " was not found"));
+					petStore.getCustomers().add(customer);
+					customer.getStoresShoppedAt().add(petStore);
+				} else {
+					PetStore petStore = new PetStore();
+					petStore.setPetStoreAddress(store.getPetStoreAddress());
+					petStore.setPetStoreCity(store.getPetStoreCity());
+					petStore.setPetStoreName(store.getPetStoreName());
+					petStore.setPetStorePhone(store.getPetStorePhone());
+					petStore.setPetStoreState(store.getPetStoreState());
+					petStore.setPetStoreZip(store.getPetStoreZip());
+					petStore.getCustomers().add(customer);
+					customer.getStoresShoppedAt().add(petStore);
+				}
+			}
+		}
+		
+	}
+
+	private Customer findOrCreateCustomer(Long customerId) {
+		Customer cu;
+		if (Objects.isNull(customerId)) {
+			cu = new Customer();
+		} else {
+			cu = findCustomerById(customerId);
+		}
+		return cu;
+	}
+
+	private Customer findCustomerById(Long customerId) {
+		return cuDao.findById(customerId).orElseThrow(() -> new NoSuchElementException(
+				"Customer with ID =" + customerId + " was not Found"));
 	}
 	
 	
