@@ -15,6 +15,7 @@ import pet.store.controller.model.CustomerData;
 import pet.store.controller.model.CustomerResponse;
 import pet.store.controller.model.EmployeeData;
 import pet.store.controller.model.EmployeeResponse;
+import pet.store.controller.model.EntityIdCollection;
 import pet.store.controller.model.PetStoreData;
 import pet.store.controller.model.PetStoreResponse;
 import pet.store.entity.Customer;
@@ -255,6 +256,24 @@ public class StoreService {
 		}
 		
 	}
+
+	public Object retrieveById(EntityIdCollection object, entity entity) {
+		switch(entity) {
+		case EMPLOYEE:
+			Long storeId = object.getId1();
+			Long employeeId = object.getId2();
+			Employee employee = emDao.findById(employeeId).orElseThrow(() -> new NoSuchElementException(
+					"Employee with ID ="+ employeeId + " was not found."));
+			if (employee.getPetStore().getPetStoreId() != storeId) {
+				throw new NoSuchElementException("Employee with store ID = " + storeId + " and employee ID = "+ employeeId + " was not found.");
+			}
+			
+		}
+	}
+
+	
+
+
 	
 	
 

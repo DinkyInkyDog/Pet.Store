@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import pet.store.controller.model.CustomerData;
 import pet.store.controller.model.EmployeeData;
+import pet.store.controller.model.EntityIdCollection;
 import pet.store.controller.model.PetStoreData;
 import pet.store.controller.model.PetStoreResponse;
 import pet.store.service.StoreService;
@@ -79,6 +81,16 @@ public class StoreController {
 		
 		return Map.of("Message", "Deletion of Employee with ID = " + employeeId + " was successful");
 	}
+	
+	@GetMapping("/store/{storeId}/employee/{employeeId}")
+	public EmployeeData retrieveEmployeeById(
+			@PathVariable Long storeId,
+			@PathVariable Long employeeId) {
+		log.info("retrieving employee with ID={} and store ID={}", employeeId, storeId);
+		EntityIdCollection employeeObject = new EntityIdCollection(storeId, employeeId);
+		return ss.retrieveById(employeeObject, entity.EMPLOYEE);
+	}
+	
 	
 	
 	//PetStore---------------------
