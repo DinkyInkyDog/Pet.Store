@@ -1,7 +1,9 @@
 package pet.store.service;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -257,6 +259,8 @@ public class StoreService {
 		
 	}
 
+	
+	@Transactional(readOnly = true)
 	public Object retrieveById(EntityIdCollection object, entity entity) {
 		switch(entity) {
 		case EMPLOYEE:
@@ -265,9 +269,71 @@ public class StoreService {
 			Employee employee = emDao.findById(employeeId).orElseThrow(() -> new NoSuchElementException(
 					"Employee with ID ="+ employeeId + " was not found."));
 			if (employee.getPetStore().getPetStoreId() != storeId) {
-				throw new NoSuchElementException("Employee with store ID = " + storeId + " and employee ID = "+ employeeId + " was not found.");
+				throw new IllegalStateException("Employee with store ID = " + storeId + " and employee ID = "+ employeeId + " was not found.");
 			}
+			return new EmployeeData(employee);
 			
+		case CUSTOMER:
+			Long customerId = object.getId1();
+			Customer customer = cuDao.findById(customerId).orElseThrow(() -> new NoSuchElementException(
+					"Customer with ID=" +customerId + " was not found."));
+			return new CustomerData(customer);
+		case PET_STORE:
+			Long petStoreId = object.getId1();
+			PetStore store = psDao.findById(petStoreId).orElseThrow(() -> new NoSuchElementException(
+					"Pet store wih ID=" + petStoreId + " was not found."));
+			return new PetStoreData(store);		
+		default:
+			throw new IllegalArgumentException("No Entity specified.");
+				
+			
+		}
+	}
+
+	public Set<EmployeeData> retrieveAllEmployeeFromStore(Long storeId) {
+		Set<EmployeeData> employeesData = new HashSet<>();
+		Set<Employee> employees = emDao.findByForeignKey(storeId);
+		for(Employee employee: employees) {
+			employeesData.add(new EmployeeData(employee));
+		}
+		return employeesData;
+	}
+
+	@Transactional(readOnly = true)
+	public Object retrieveAll(entity entity) {
+		switch(entity) {
+		case EMPLOYEE:
+			Set<Employee> employees = (Set<Employee>) emDao.findAll();
+			Set<EmployeeData> employeesData = new HashSet<>();
+			for(Employee employee: employees) {
+				employeesData.add(new EmployeeData(employee));
+			}
+			if(employeesData.isEmpty()) {
+				throw new IllegalArgumentException("There are no employees to show.");
+			}
+			return employeesData;
+		case CUSTOMER:
+			Set<Customer> customers = (Set<Customer>) cuDao.findAll();
+			Set<CustomerData> customersData = new HashSet<>();
+			for (Customer customer: customers) {
+				customersData.add(new CustomerData(customer));
+			}
+			if(customersData.isEmpty()) {
+				throw new IllegalArgumentException("There are no customers to show.");
+			}
+			return customersData;
+		case PET_STORE:
+			Set<PetStore> petStores = (Set<PetStore>) psDao.findAll();
+			Set<PetStoreData> petStoresData = new HashSet<>();
+			for(PetStore petstore : petStores) {
+				petStoresData.add(new PetStoreData(petstore));
+			}
+			if(petStoresData.isEmpty()) {
+				throw new IllegalArgumentException("There are no pet stores to show.");
+			}
+			return petStoresData;
+		default:
+			throw new IllegalArgumentException("No entity specified");
 		}
 	}
 

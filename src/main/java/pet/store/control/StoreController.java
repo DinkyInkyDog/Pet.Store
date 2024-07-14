@@ -1,6 +1,7 @@
 package pet.store.control;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,10 +89,21 @@ public class StoreController {
 			@PathVariable Long employeeId) {
 		log.info("retrieving employee with ID={} and store ID={}", employeeId, storeId);
 		EntityIdCollection employeeObject = new EntityIdCollection(storeId, employeeId);
-		return ss.retrieveById(employeeObject, entity.EMPLOYEE);
+		return (EmployeeData) ss.retrieveById(employeeObject, entity.EMPLOYEE);
 	}
 	
+	@GetMapping("/store/{storeId}/employee")
+	public Set<EmployeeData> retrieveAllEmployeesFromStore(
+			@PathVariable Long storeId){
+		log.info("retrieving employees from Pet store with ID={}", storeId);
+		return ss.retrieveAllEmployeeFromStore(storeId);
+	}
 	
+	@GetMapping("/employee")
+	public Set<EmployeeData> retrieveAllEmployees(){
+		log.info("retrieveing all employees");
+		return (Set<EmployeeData>) ss.retrieveAll(entity.EMPLOYEE);
+	}
 	
 	//PetStore---------------------
 	
@@ -131,6 +143,20 @@ public class StoreController {
 	}
 	
 	
+	@GetMapping("/store")
+	public Set<PetStoreData> retrieveAllPetStores(){
+		log.info("retrieving all pet stores");
+		return (Set<PetStoreData>) ss.retrieveAll(entity.PET_STORE);
+	}
+	
+	@GetMapping("/store/{storeId}")
+	public PetStoreData retrievePetStoreById(
+			@PathVariable Long storeId) {
+		log.info("retrieving the pet store with ID={}",storeId);
+		EntityIdCollection storeInfo = new EntityIdCollection(storeId);
+		return (PetStoreData) ss.retrieveById(storeInfo, entity.PET_STORE);
+	}
+	
 	//Customer------------------------
 	
 	@PostMapping("/customer")
@@ -167,4 +193,18 @@ public class StoreController {
 		return Map.of("Message", "Deletion of Employee with ID = " + customerId + " was successful");
 	}
 	
+	@GetMapping("/customer")
+	public Set<CustomerData> retrieveAllCustomers(){
+		log.info("retrieving all customers");
+		return (Set<CustomerData>) ss.retrieveAll(entity.CUSTOMER);
+	}
+	
+	
+	@GetMapping("/customer/{customerId}")
+	public CustomerData retrieveCustomerById(
+			@PathVariable Long customerId) {
+		log.info("retrieving the customer with ID = {}", customerId);
+		EntityIdCollection customerInfo = new EntityIdCollection(customerId);
+		return (CustomerData) ss.retrieveById(customerInfo, entity.CUSTOMER);
+	}
 }
