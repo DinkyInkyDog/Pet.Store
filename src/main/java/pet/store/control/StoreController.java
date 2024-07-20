@@ -92,12 +92,7 @@ public class StoreController {
 		return (EmployeeData) ss.retrieveById(employeeObject, entity.EMPLOYEE);
 	}
 	
-	@GetMapping("/store/{storeId}/employee")
-	public Set<EmployeeData> retrieveAllEmployeesFromStore(
-			@PathVariable Long storeId){
-		log.info("retrieving employees from Pet store with ID={}", storeId);
-		return ss.retrieveAllEmployeeFromStore(storeId);
-	}
+	
 	
 	@GetMapping("/employee")
 	public Set<EmployeeData> retrieveAllEmployees(){

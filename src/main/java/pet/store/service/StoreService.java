@@ -1,6 +1,7 @@
 package pet.store.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
@@ -290,20 +291,12 @@ public class StoreService {
 		}
 	}
 
-	public Set<EmployeeData> retrieveAllEmployeeFromStore(Long storeId) {
-		Set<EmployeeData> employeesData = new HashSet<>();
-		Set<Employee> employees = emDao.findByForeignKey(storeId);
-		for(Employee employee: employees) {
-			employeesData.add(new EmployeeData(employee));
-		}
-		return employeesData;
-	}
 
 	@Transactional(readOnly = true)
 	public Object retrieveAll(entity entity) {
 		switch(entity) {
 		case EMPLOYEE:
-			Set<Employee> employees = (Set<Employee>) emDao.findAll();
+			List<Employee> employees = (List<Employee>) emDao.findAll();
 			Set<EmployeeData> employeesData = new HashSet<>();
 			for(Employee employee: employees) {
 				employeesData.add(new EmployeeData(employee));
@@ -313,7 +306,7 @@ public class StoreService {
 			}
 			return employeesData;
 		case CUSTOMER:
-			Set<Customer> customers = (Set<Customer>) cuDao.findAll();
+			List<Customer> customers = (List<Customer>) cuDao.findAll();
 			Set<CustomerData> customersData = new HashSet<>();
 			for (Customer customer: customers) {
 				customersData.add(new CustomerData(customer));
@@ -323,7 +316,7 @@ public class StoreService {
 			}
 			return customersData;
 		case PET_STORE:
-			Set<PetStore> petStores = (Set<PetStore>) psDao.findAll();
+			List<PetStore> petStores = (List<PetStore>) psDao.findAll();
 			Set<PetStoreData> petStoresData = new HashSet<>();
 			for(PetStore petstore : petStores) {
 				petStoresData.add(new PetStoreData(petstore));
